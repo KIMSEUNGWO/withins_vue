@@ -25,7 +25,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import {onMounted, ref} from 'vue';
+import {useRoute} from "vue-router";
 
 const selectedRegion = ref('all');
 const regionOptions = [
@@ -48,6 +49,17 @@ const searchHandler = () => {
   }
   emit('update-data', data);
 }
+
+const route = useRoute();
+
+onMounted(() => {
+  if (route.query.word) {
+    searchKeyword.value = route.query.word as string;
+  }
+  if (route.query.region) {
+    selectedRegion.value = route.query.region as string;
+  }
+})
 </script>
 
 <style scoped>

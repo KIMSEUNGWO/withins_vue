@@ -75,11 +75,12 @@
 
 <script setup lang="ts">
 
-import {ref, computed} from "vue";
+import {ref, computed, onMounted, watch} from "vue";
 import { Pageable } from "@/domain/Pageable";
 import { ApiServer } from "@/services/ApiServer";
 import { Career } from "@/domain/Career";
 import CareerPaginationComponent from "@/components/CareerPaginationComponent.vue";
+import {useRoute} from "vue-router";
 
 const paginationRef = ref<InstanceType<typeof CareerPaginationComponent> | null>(null);
 
@@ -130,6 +131,7 @@ const selectSort = (key: string) => {
   handleSearch();
 };
 const selectTag = (tag: string) => {
+  console.log('선택될때 현재 태그 목록 :', tags.value)
   const index = tags.value.indexOf(tag);
   if (index === -1) {
     // 태그가 없으면 추가
@@ -170,6 +172,30 @@ const handleSearch = () => {
     paginationRef.value.updateSearchParams(params);
   }
 };
+
+const route = useRoute();
+
+// 초기화 시 URL의 쿼리 파라미터에서 상태 복원
+onMounted(() => {
+  // URL에서 상태 복원
+  if (route.query.sort) {
+    sort.value = route.query.sort as string;
+  }
+
+  if (route.query.tags) {
+    let parsedTags: string[] = [];
+
+    if (Array.isArray(route.query.tags)) {
+      parsedTags = route.query.tags.map(tag => tag.trim());
+    } else {
+      // 쉼표로 구분된 문자열을 배열로 변환하고 각 항목 트림
+      parsedTags = (route.query.tags as string).split(',').map(tag => tag.trim());
+    }
+
+    tags.value = parsedTags;
+  }
+});
+
 
 </script>
 
