@@ -31,6 +31,7 @@
 
 :root {
     --main-color-1: #0071E3;
+    --main-color-1-hover: #f8fbff;
     --main-color-2: #00C7BE;
     --main-color-gradient: linear-gradient(90deg, #0071E3 0%, #00C7BE 100%);
 

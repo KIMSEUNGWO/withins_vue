@@ -4,4 +4,8 @@
   </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+main {
+  min-height: 1500px;
+}
+</style>

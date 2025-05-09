@@ -8,6 +8,7 @@
   margin: 0 auto;
   min-height: 100vh;
   width: calc(100vw - 200px);
+  max-width: 1200px;
 }
 </style>
 

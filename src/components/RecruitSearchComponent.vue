@@ -51,6 +51,9 @@ const searchHandler = () => {
 </script>
 
 <style scoped>
+#recruit-search {
+  margin-bottom: 20px;
+}
 #recruit-search #wrapper {
   display: flex;
   gap: 15px;

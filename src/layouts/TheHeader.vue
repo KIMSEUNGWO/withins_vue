@@ -48,6 +48,7 @@ header {
 }
 .menu a:hover, .menu a.router-link-active {
   color: var(--f1);
+  font-weight: 500;
   text-decoration: underline;
 }
 </style>

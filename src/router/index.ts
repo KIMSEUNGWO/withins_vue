@@ -9,21 +9,38 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/news",
-    name: "Center News",
+    name: "centerNews",
     component: () => import("../views/CenterNewsView.vue"),
   },
   {
     path: "/recruit",
-    name: "Recruitment",
     component: () => import("../views/RecruitmentView.vue"),
+    children: [
+      {
+        path: "",
+        name: "recruitmentList",
+        component: () => import("../pages/RecruitmentPage.vue"),
+      },
+      {
+        path: ":recruitId",
+        name: "recruitmentDetail",
+        component: () => import("../pages/RecruitmentDetailPage.vue"),
+        props: true,
+      }
+    ]
   },
   {
     path: "/career",
-    name: "Career Profile",
+    name: "careerProfile",
     component: () => import("../views/CareerProfileView.vue"),
   },
+  // 존재하지 않는 경로에 대한 처리
+  {
+    path: "/:pathMatch(.*)*",
+    name: "notFound",
+    component: () => import("../views/error/NotFoundView.vue"),
+  }
 ];
-
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
