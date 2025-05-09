@@ -3,6 +3,7 @@ import {Recruit} from "@/domain/Recruit";
 import {RecruitDetail} from "@/domain/RecruitDetail";
 import {AttachedFile} from "@/domain/AttachedFile";
 import {Organization} from "@/domain/Organization";
+import {Career} from "@/domain/Career";
 
 export class ApiServer {
 
@@ -186,6 +187,120 @@ export class ApiServer {
     };
 
     return new RecruitDetail(json.data);
+  }
+
+  static mockCareer(url : string) : Pageable<Career> {
+    const json = {
+      'result': 'OK',
+      'data': {
+        'totalElements': 71,
+        'totalPages': 8,
+        'pageNumber': 0,
+        'condition' : {
+          'sort': 'POPULAR',
+          'tags': [
+              '노래교육', '안전'
+          ],
+        },
+        'content': [
+          {
+            careerId : 1,
+            imageUrl : null,
+            summary : '한줄소개 테스트임',
+            experience : '· 12년 경력 전문 MC & 가수\n· 맞춤형 진행 + 센스 폭발 + 유머 장착\n· 레크레이션 지도자 & 가요전문지도사 보유',
+            tags : [
+                '어쩌구', '저쩌구', '테스트', '테스트임', '다른거', '10년경력'
+            ]
+          },
+          {
+            careerId : 2,
+            imageUrl : null,
+            summary : '한줄소개 테스트임',
+            experience : '· 12년 경력 전문 MC & 가수\n· 맞춤형 진행 + 센스 폭발 + 유머 장착\n· 레크레이션 지도자 & 가요전문지도사 보유',
+            tags : [
+              '어쩌구', '저쩌구', '테스트', '테스트임', '다른거', '10년경력'
+            ]
+          },
+          {
+            careerId : 3,
+            imageUrl : null,
+            summary : '한줄소개 테스트임',
+            experience : '· 12년 경력 전문 MC & 가수\n· 맞춤형 진행 + 센스 폭발 + 유머 장착\n· 레크레이션 지도자 & 가요전문지도사 보유',
+            tags : [
+              '어쩌구', '저쩌구', '테스트', '테스트임', '다른거', '10년경력'
+            ]
+          },
+          {
+            careerId : 4,
+            imageUrl : null,
+            summary : '한줄소개 테스트임',
+            experience : '· 12년 경력 전문 MC & 가수\n· 맞춤형 진행 + 센스 폭발 + 유머 장착\n· 레크레이션 지도자 & 가요전문지도사 보유',
+            tags : [
+              '어쩌구', '저쩌구', '테스트', '테스트임', '다른거', '10년경력'
+            ]
+          },
+          {
+            careerId : 5,
+            imageUrl : null,
+            summary : '한줄소개 테스트임',
+            experience : '· 12년 경력 전문 MC & 가수\n· 맞춤형 진행 + 센스 폭발 + 유머 장착\n· 레크레이션 지도자 & 가요전문지도사 보유',
+            tags : [
+              '어쩌구', '저쩌구', '테스트', '테스트임', '다른거', '10년경력'
+            ]
+          },
+          {
+            careerId : 6,
+            imageUrl : null,
+            summary : '한줄소개 테스트임',
+            experience : '· 12년 경력 전문 MC & 가수\n· 맞춤형 진행 + 센스 폭발 + 유머 장착\n· 레크레이션 지도자 & 가요전문지도사 보유',
+            tags : [
+              '어쩌구', '저쩌구', '테스트', '테스트임', '다른거', '10년경력'
+            ]
+          },
+          {
+            careerId : 7,
+            imageUrl : null,
+            summary : '한줄소개 테스트임',
+            experience : '· 12년 경력 전문 MC & 가수\n· 맞춤형 진행 + 센스 폭발 + 유머 장착\n· 레크레이션 지도자 & 가요전문지도사 보유',
+            tags : [
+              '어쩌구', '저쩌구', '테스트', '테스트임', '다른거', '10년경력'
+            ]
+          },
+          {
+            careerId : 8,
+            imageUrl : null,
+            summary : '한줄소개 테스트임',
+            experience : '· 12년 경력 전문 MC & 가수\n· 맞춤형 진행 + 센스 폭발 + 유머 장착\n· 레크레이션 지도자 & 가요전문지도사 보유',
+            tags : [
+              '어쩌구', '저쩌구', '테스트', '테스트임', '다른거', '10년경력'
+            ]
+          },
+          {
+            careerId : 9,
+            imageUrl : null,
+            summary : '한줄소개 테스트임',
+            experience : '· 12년 경력 전문 MC & 가수\n· 맞춤형 진행 + 센스 폭발 + 유머 장착\n· 레크레이션 지도자 & 가요전문지도사 보유',
+            tags : [
+              '어쩌구', '저쩌구', '테스트', '테스트임', '다른거', '10년경력'
+            ]
+          },
+          {
+            careerId : 10,
+            imageUrl : null,
+            summary : '한줄소개 테스트임',
+            experience : '· 12년 경력 전문 MC & 가수\n· 맞춤형 진행 + 센스 폭발 + 유머 장착\n· 레크레이션 지도자 & 가요전문지도사 보유',
+            tags : [
+              '어쩌구', '저쩌구', '테스트', '테스트임', '다른거', '10년경력'
+            ]
+          },
+        ]
+      }
+    };
+
+    const pageable = new Pageable<Career>(json.data);
+    let careers : Array<Career> = json.data.content.map(value => new Career(value));
+    pageable.setContent(careers)
+    return pageable;
   }
 
 }

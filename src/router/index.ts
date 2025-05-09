@@ -19,12 +19,12 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "",
         name: "recruitmentList",
-        component: () => import("../pages/RecruitmentPage.vue"),
+        component: () => import("../pages/recruitment/RecruitmentPage.vue"),
       },
       {
         path: ":recruitId",
         name: "recruitmentDetail",
-        component: () => import("../pages/RecruitmentDetailPage.vue"),
+        component: () => import("../pages/recruitment/RecruitmentDetailPage.vue"),
         props: true,
       }
     ]
@@ -33,6 +33,13 @@ const routes: Array<RouteRecordRaw> = [
     path: "/career",
     name: "careerProfile",
     component: () => import("../views/CareerProfileView.vue"),
+    children: [
+      {
+        path: "",
+        name: "careerList",
+        component: () => import("../pages/career/CareerPage.vue"),
+      }
+    ]
   },
   // 존재하지 않는 경로에 대한 처리
   {

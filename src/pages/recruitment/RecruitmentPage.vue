@@ -1,10 +1,6 @@
 <template>
   <div id="banner"></div>
-
-  <!-- 검색 컴포넌트 -->
   <RecruitSearchComponent @update-data="handleSearch" />
-
-  <!-- 페이지네이션 컴포넌트 -->
   <PaginationComponent
       ref="paginationRef"
       :fetch-function="fetchRecruits"
@@ -55,14 +51,12 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useRoute } from "vue-router";
 import RecruitSearchComponent from "@/components/RecruitSearchComponent.vue";
 import PaginationComponent from "@/components/PaginationComponent.vue";
 import { ApiServer } from "@/services/ApiServer";
 import { Pageable } from "@/domain/Pageable";
 import { Recruit } from "@/domain/Recruit";
 
-const route = useRoute();
 const paginationRef = ref<InstanceType<typeof PaginationComponent> | null>(null);
 
 // 초기 검색 파라미터
@@ -76,9 +70,9 @@ const fetchRecruits = async (page: number, params: any): Promise<Pageable<Recrui
   // API 호출 준비
   const apiParams = {
     page: page,  // 페이지 인덱스 (0부터 시작)
-    word: params.word || '',
     condition: {
-      region: params.region || 'all'
+      region: params.region || 'all',
+      word: params.word || '',
     }
   };
 
@@ -155,5 +149,39 @@ const handleSearch = (searchData: any) => {
   font-size: 14px;
   color: var(--f3);
   font-weight: 400;
+}
+
+/* Pagination */
+.searchResult > a, .searchResult > button {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  height: 80px;
+  text-decoration: none;
+  width: 100%;
+}
+.searchResult > a:first-child {
+  border-top: 1px #DCDCDC solid;
+}
+.searchResult > a {
+  border-bottom: 1px #DCDCDC solid;
+}
+.searchResult > a:last-child {
+  border-bottom: 1px var(--f1) solid;
+}
+.searchResult > a:hover:not(#searchTitle > a),
+.searchResult > button:hover:not(#searchTitle > a){
+  background-color: var(--main-color-1-hover);
+  border-radius: 5px;
+}
+.searchResult > a > li,
+.searchResult > button > li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#result.box {
+  padding: 24px;
 }
 </style>

@@ -2,9 +2,6 @@
   <div id="pagination">
     <!-- 테이블 컨텐츠 부분 (슬롯으로 제공) -->
     <div id="result" class="box">
-      <ul class="searchResult" id="searchTitle">
-        <slot name="table-top-slot"></slot>
-      </ul>
       <ul class="searchResult" id="searchResult">
         <slot name="table-result-slot" :items="items"></slot>
       </ul>
@@ -216,7 +213,6 @@ defineExpose({
 
 
 <style scoped>
-
 /* 페이지네이션 */
 .pagination {
   display: flex;
@@ -296,46 +292,22 @@ defineExpose({
   text-align: center;
 }
 
-#searchTitle {
+#searchResult {
   display: grid;
-  align-items: center;
-  justify-items: center;
-  height: 50px;
-  background-color: #F5F6F8;
-  border-top: 1px solid var(--f1);
+  grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+  column-gap: 20px;
+  row-gap: 10px;
 }
-
-.searchResult > a, .searchResult > button {
-  display: grid;
-  align-items: center;
-  justify-items: center;
-  height: 80px;
-  text-decoration: none;
-  width: 100%;
-}
-.searchResult > a:first-child {
-  border-top: 1px #DCDCDC solid;
-}
-.searchResult > a {
-  border-bottom: 1px #DCDCDC solid;
-}
-.searchResult > a:last-child {
-  border-bottom: 1px var(--f1) solid;
-}
-.searchResult > a:hover:not(#searchTitle > a),
-.searchResult > button:hover:not(#searchTitle > a){
-  background-color: var(--main-color-1-hover);
-  border-radius: 5px;
-}
-.searchResult > a > li,
-.searchResult > button > li {
+.result {
+  padding: 10px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: 15px;
+  min-height: 180px;
+  transition: transform 0.2s ease-in-out;
+}
+.result:hover {
+  transform: translateY(-2px);
 }
 
 
-#result.box {
-  padding: 24px;
-}
 </style>
