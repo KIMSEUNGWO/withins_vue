@@ -6,6 +6,6 @@
 
 <style scoped>
 main {
-  min-height: 1500px;
+  min-height: 100vh;
 }
 </style>

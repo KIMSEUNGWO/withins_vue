@@ -9,18 +9,18 @@
           </svg>
         </RouterLink>
       </div>
-      <ul id="menus">
-        <li class="menu">
-          <RouterLink to="/news">복지관소식</RouterLink>
-        </li>
-        <li class="menu">
-          <RouterLink to="/recruit">구인구직</RouterLink>
-        </li>
-        <li class="menu">
-          <RouterLink to="/career">커리어</RouterLink>
-        </li>
-      </ul>
     </div>
+    <ul id="menus">
+      <li class="menu">
+        <RouterLink to="/news">복지관소식</RouterLink>
+      </li>
+      <li class="menu">
+        <RouterLink to="/recruit">구인구직</RouterLink>
+      </li>
+      <li class="menu">
+        <RouterLink to="/career">커리어</RouterLink>
+      </li>
+    </ul>
     <div id="h-right">
       <a>로그인</a>
     </div>
@@ -33,22 +33,45 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
-#h-left {
-  display: flex;
-  align-items: center;
-  gap: 60px;
-}
+
 #menus {
   display: flex;
   gap: 16px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+#h-left {
+  width: 120px;
+}
+#h-right {
+  width: 120px;
+  text-align: right;
 }
 .menu a {
   color: var(--f3);
 }
 .menu a:hover, .menu a.router-link-active {
-  color: var(--f1);
+  color: var(--main-color-1);
   font-weight: 500;
-  text-decoration: underline;
+}
+.menu a.router-link-active {
+  position: relative;
+}
+.menu a.router-link-active::after {
+  content: '';
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  border-radius: 2px;
+  background: var(--main-color-gradient);
+  top: 150%;
+  left: 0;
+  z-index: 2;
 }
 </style>
