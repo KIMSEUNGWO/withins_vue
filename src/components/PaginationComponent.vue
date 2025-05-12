@@ -129,6 +129,10 @@ function updateSearchParams(params: Record<string, any>) {
 
 // 페이지 이동 함수 (URL 업데이트 포함)
 function navigateToPage(page: number) {
+  window.scrollTo({
+    top: 0,
+    behavior: 'auto'
+  });
   currentPage.value = page;
   updateUrl();
   loadData();
