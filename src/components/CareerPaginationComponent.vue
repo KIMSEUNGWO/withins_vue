@@ -298,7 +298,7 @@ defineExpose({
 
 #searchResult {
   display: grid;
-  grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+  grid-template-columns: repeat(2, 1fr);
   column-gap: 20px;
   row-gap: 10px;
 }
