@@ -4,6 +4,7 @@ import {RecruitDetail} from "@/domain/RecruitDetail";
 import {AttachedFile} from "@/domain/AttachedFile";
 import {Organization} from "@/domain/Organization";
 import {Career} from "@/domain/Career";
+import {News} from "@/domain/News";
 
 export class ApiServer {
 
@@ -155,6 +156,65 @@ export class ApiServer {
     const pageable = new Pageable<Recruit>(json.data);
     let recruits : Array<Recruit> = json.data.content.map(value => new Recruit(value));
     pageable.setContent(recruits)
+    return pageable;
+  }
+
+  static mockNews(url : String) : Pageable<News> {
+    const json = {
+      'result': 'OK',
+      'data': {
+        'totalElements': 71,
+        'totalPages': 8,
+        'pageNumber': 0,
+        'condition' : {
+          'word': '테스트',
+          'region': 'all',
+          'type': 'ALL',
+        },
+        'content': [
+          {
+            'newsId': 1,
+            'title': '2025년 사회교육프로그램 강사모집 [웰빙댄스]',
+            'type' : 'NOTICE',
+            'link' : 'https://naver.com',
+            'organization': {
+              'organizationId': 1,
+              'name' : '서초구립양재노인종합복지관',
+              'region': '인천 남동구'
+            },
+            'createAt': '2025-01-01T00:00:00',
+          },
+          {
+            'newsId': 1,
+            'title': '2025년 사회교육프로그램 강사모집 [웰빙댄스]',
+            'type' : 'NOTICE',
+            'link' : 'https://naver.com',
+            'organization': {
+              'organizationId': 1,
+              'name' : '서초구립양재노인종합복지관',
+              'region': '인천 남동구'
+            },
+            'createAt': '2025-01-01T00:00:00',
+          },
+          {
+            'newsId': 1,
+            'title': '2025년 사회교육프로그램 강사모집 [웰빙댄스]',
+            'type' : 'NOTICE',
+            'link' : 'https://naver.com',
+            'organization': {
+              'organizationId': 1,
+              'name' : '서초구립양재노인종합복지관',
+              'region': '인천 남동구'
+            },
+            'createAt': '2025-01-01T00:00:00',
+          }
+        ]
+      }
+    };
+
+    const pageable = new Pageable<News>(json.data);
+    let news : Array<News> = json.data.content.map(value => new News(value));
+    pageable.setContent(news)
     return pageable;
   }
   

@@ -22,7 +22,7 @@
       </li>
     </ul>
     <div id="h-right">
-      <a>로그인</a>
+      <RouterLink to="/login">로그인</RouterLink>
     </div>
   </header>
 </template>
