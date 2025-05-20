@@ -34,7 +34,7 @@
         </div>
         <div class="news-content">
           <div class="news-content-top">
-            <span class="org">서울구립장애인종합복지관</span>
+            <span class="news-content-org">서울구립장애인종합복지관</span>
             <h3>2025년 장애인 일자리 지원사업 참여자 모집 안내</h3>
           </div>
           <div class="news-content-bottom">
@@ -53,7 +53,7 @@
         </div>
         <div class="news-content">
           <div class="news-content-top">
-            <span class="org">서울구립장애인종합복지관</span>
+            <span class="news-content-org">서울구립장애인종합복지관</span>
             <h3>2025년 장애인 일자리 지원사업 참여자 모집 안내</h3>
           </div>
           <div class="news-content-bottom">
@@ -72,7 +72,7 @@
         </div>
         <div class="news-content">
           <div class="news-content-top">
-            <span class="org">서울구립장애인종합복지관</span>
+            <span class="news-content-org">서울구립장애인종합복지관</span>
             <h3>2025년 장애인 일자리 지원사업 참여자 모집 안내</h3>
           </div>
           <div class="news-content-bottom">
@@ -111,6 +111,7 @@
             v-for="news in items"
             :key="news.newsId"
             class="result"
+           target="_blank"
         >
           <span class="tit">{{ news.title }}</span>
           <div class="org">
@@ -140,16 +141,17 @@ import {Pageable} from "@/domain/Pageable";
 import {ApiServer} from "@/services/ApiServer";
 import {News} from "@/domain/News";
 
+document.title = '복지관소식 | WithIns'
 const tabList = {
   'ALL' : '전체 소식',
   'NOTICE' : '공지사항',
   'WELFARE' : '복지관소식',
-  'RECRUITMENT' : '채용',
+  'RECRUIT' : '채용',
   'EVENT' : '행사/프로그램'
 };
 
 const word = ref('');
-const region = ref('all');
+const region = ref('ALL');
 const tab = ref('ALL');
 
 const changeTab = (tabValue : string) => {
@@ -162,15 +164,9 @@ const changeTab = (tabValue : string) => {
 }
 
 const updateCondition = (data : any ) : any => {
-  if (data.word) {
     word.value = data.word;
-  }
-  if (data.region) {
     region.value = data.region;
-  }
-  if (data.type) {
     tab.value = data.type;
-  }
 
   const updatedParams = {
     word : word.value,
@@ -194,15 +190,18 @@ const fetchNews = async (page: number, params: any): Promise<Pageable<News>> => 
   // API 호출 준비
   const apiParams = {
     page: page,  // 페이지 인덱스 (0부터 시작)
-    condition: {
-      region: params.region || 'all',
-      word: params.word || '',
-      tab: params.tab || 'ALL',
-    }
+    size: 10,
+    region: params.region || 'ALL',
+    word: params.word || '',
+    type: params.type || 'ALL',
   };
 
   // API 호출
-  return ApiServer.mockNews(apiParams);
+  const json: any = await ApiServer.fetchGet('/news', apiParams);
+  const pageable = new Pageable<News>(json);
+  let news : Array<News> = json.content.map((value:any) => new News(value));
+  pageable.setContent(news)
+  return pageable;
 };
 
 // 검색 이벤트 핸들러
@@ -211,7 +210,7 @@ const handleSearch = (searchData: any) => {
     // 검색 파라미터 형식 변환
     const params = {
       word: searchData.word || '',
-      region: searchData.condition?.region || 'all',
+      region: searchData.region || 'ALL',
     };
     updateCondition(params);
   }
@@ -264,7 +263,8 @@ const handleSearch = (searchData: any) => {
 }
 
 .news-card {
-  display: block;
+  display: flex;
+  flex-direction: column;
   min-height: 300px;
   border-radius: 16px;
   overflow: hidden;
@@ -282,6 +282,7 @@ const handleSearch = (searchData: any) => {
 }
 
 .news-content {
+  flex: 1;
   padding: 15px;
   display: flex;
   flex-direction: column;
@@ -348,6 +349,8 @@ const handleSearch = (searchData: any) => {
   position: relative;
   z-index: 2;
   border-radius: 6px 6px 0 0;
+
+  white-space: nowrap;
 }
 
 .tab:hover {
@@ -443,11 +446,75 @@ const handleSearch = (searchData: any) => {
   font-weight: 400;
 }
 
-@media screen and (max-width: 1000px) {
+@media (max-width: 1000px) {
 
   #news-cards {
     grid-template-columns: repeat(2, 1fr);
   }
 
+}
+
+@media (max-width: 900px) {
+
+  :deep(.searchResult > a:not(.none)),
+  :deep(.searchResult > button:not(.none)) {
+    grid-template-columns: 60% 30% 10%;
+  }
+
+  .result .type {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+
+  :deep(.searchResult > a:not(.none)),
+  :deep(.searchResult > button:not(.none)) {
+    grid-template-columns: initial;
+    grid-template-rows: auto auto;
+  }
+  .searchResult > a {
+    height: initial;
+    min-height: 80px;
+    align-items: center;
+    justify-content: start;
+    .tit {
+      grid-column: 1 / 4;
+      padding-top: 10px;
+      padding-bottom: 5px;
+    }
+    .org {
+      padding-left: 15px;
+      padding-right: 10px;
+      padding-bottom: 10px;
+
+      .org-name {
+        color: var(--f3);
+        white-space: nowrap;
+      }
+
+      .org-region {
+        display: none;
+      }
+    }
+    .createAt {
+      padding-bottom: 10px;
+    }
+  }
+}
+
+@media (max-width: 730px) {
+
+  .tabs {
+    overflow-x: auto; /* 가로 스크롤 추가 */
+    flex-wrap: nowrap; /* 탭이 줄바꿈되지 않도록 설정 */
+    scrollbar-width: none; /* Firefox에서 스크롤바 숨기기 */
+    -webkit-overflow-scrolling: touch; /* 모바일에서 부드러운 스크롤 지원 */
+  }
+
+  /* Webkit 브라우저(Chrome, Safari 등)에서 스크롤바 숨기기 */
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
 }
 </style>

@@ -4,7 +4,7 @@
     <div id="wrapper">
       <div id="filters">
         <div class="filter">
-          <select id="region" v-model="selectedRegion">
+          <select id="region" v-model="selectedRegion" @change="searchHandler">
             <option v-for="option in regionOptions" :key="option.value" :value="option.value">
               {{ option.text }}
             </option>
@@ -28,12 +28,12 @@
 import {onMounted, ref} from 'vue';
 import {useRoute} from "vue-router";
 
-const selectedRegion = ref('all');
+const selectedRegion = ref('ALL');
 const regionOptions = [
-  { value: 'all', text: '전국' },
-  { value: 'seoul', text: '서울' },
-  { value: 'bucheon', text: '부천' },
-  { value: 'incheon', text: '인천' }
+  { value: 'ALL', text: '전국' },
+  { value: 'SEOUL', text: '서울' },
+  { value: 'BUCHEON', text: '부천' },
+  { value: 'INCHEON', text: '인천' }
 ];
 
 const emit = defineEmits(['update-data']);
@@ -43,9 +43,7 @@ const searchKeyword = ref('');
 const searchHandler = () => {
   let data = {
     word : searchKeyword.value,
-    condition : {
-      region : selectedRegion.value,
-    }
+    region : selectedRegion.value,
   }
   emit('update-data', data);
 }

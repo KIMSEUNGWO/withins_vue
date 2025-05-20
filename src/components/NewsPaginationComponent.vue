@@ -16,7 +16,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
       </button>
       <ol class="page_list">
-        <li v-for="i in pageButtons" :key="i" class="page" :class="{selected : i === currentPage}">
+        <li v-for="i in visiblePageButtons" :key="i" class="page" :class="{selected : i === currentPage}">
           <button @click="goToPage(i)" type="button" class="page_link">{{ i }}</button>
         </li>
       </ol>
@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, computed, watch, onMounted, nextTick} from "vue";
+import { ref, computed, watch, onMounted, nextTick, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 // Props 정의
@@ -75,6 +75,12 @@ const totalItems = ref(0);
 const items = ref<any[]>([]);
 const searchParams = ref<Record<string, any>>({});
 
+// 화면 너비 상태 추가
+const isSmallScreen = ref(false);
+const checkScreenSize = () => {
+  isSmallScreen.value = window.innerWidth <= 590;
+};
+
 // 라우터
 const route = useRoute();
 const router = useRouter();
@@ -96,9 +102,31 @@ const pageButtons = computed(() => {
   }
   return list;
 });
+// 작은 화면에서 표시할 페이지 버튼 계산 (선택된 페이지 주변 ±2개)
+const visiblePageButtons = computed(() => {
+  if (!isSmallScreen.value) {
+    // 큰 화면에서는 기존 페이지 버튼 목록 사용
+    return pageButtons.value;
+  }
+
+  // 작은 화면에서는 선택된 페이지 주변 ±2개만 표시
+  const selectedPage = currentPage.value;
+  const start = Math.max(1, selectedPage - 2);
+  const end = Math.min(totalPages.value, selectedPage + 2);
+
+  const visibleButtons = [];
+  for (let i = start; i <= end; i++) {
+    visibleButtons.push(i);
+  }
+
+  return visibleButtons;
+});
 
 // 컴포넌트 마운트 시 URL에서 상태 복원
 onMounted(() => {
+  checkScreenSize(); // 초기 화면 너비 체크
+  window.addEventListener('resize', checkScreenSize);
+
   // URL 쿼리 파라미터에서 페이지와 검색 조건 복원
   const pageParam = route.query.page ? Number(route.query.page) : 1;
   currentPage.value = pageParam;
@@ -115,6 +143,10 @@ onMounted(() => {
 
   // 초기 데이터 로드
   loadData();
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkScreenSize);
 });
 
 // 페이지 이동 함수
@@ -300,5 +332,16 @@ defineExpose({
   line-height: 26px;
   color: #303038;
   text-align: center;
+}
+
+@media (max-width: 590px) {
+  .pagination .button_previous,
+  .pagination .button_next {
+    display: none;
+  }
+  .pagination > button svg {
+    width: 70%;
+    height: 70%;
+  }
 }
 </style>

@@ -55,6 +55,7 @@ header {
 }
 .menu a {
   color: var(--f3);
+  white-space: nowrap;
 }
 .menu a:hover, .menu a.router-link-active {
   color: var(--main-color-1);

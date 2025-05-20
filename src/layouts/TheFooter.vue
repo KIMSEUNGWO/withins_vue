@@ -1,5 +1,5 @@
 <template>
-  <footer>
+  <footer :class="{'disabled' : $route.path !== '/'}">
     <div class="footer-content">
       <div class="footer-company">
         <svg width="120" height="35" viewBox="0 0 120 35" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -56,6 +56,8 @@
   </footer>
 </template>
 <script setup lang="ts">
+import router from "@/router";
+import { routes } from "vue-router/auto-routes";
 </script>
 
 <style scoped>
@@ -123,5 +125,8 @@ footer {
   text-align: center;
   color: var(--f3);
   font-size: 14px;
+}
+.disabled {
+  display: none;
 }
 </style>

@@ -8,9 +8,9 @@ export class Pageable<T> {
     public content : Array<T> = [];
 
     public constructor(data : any) {
-        this.totalElements = data.totalElements;
-        this.totalPages = data.totalPages;
-        this.pageNumber = data.pageNumber;
+        this.totalElements = data.page.totalElements;
+        this.totalPages = data.page.totalPages;
+        this.pageNumber = data.page.pageNumber;
         this.condition = data.condition;
     }
 

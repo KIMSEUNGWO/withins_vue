@@ -7,52 +7,47 @@ export class News {
     public organization : Organization;
     public type : string;
     public link : string;
-    public createAt : Date;
+    public createdAt : Date;
 
     public constructor(data : any) {
-        this.newsId = data.recruitId;
+        this.newsId = data.id;
         this.title = data.title;
         this.type = data.type;
         this.link = data.link;
         this.organization = new Organization(data.organization);
-        this.createAt = new Date(data.createAt);
+        this.createdAt = new Date(data.createdAt);
     }
 
     public getCreateAt() : string {
         const now = new Date();
-        const diffInSeconds = Math.floor((now.getTime() - this.createAt.getTime()) / 1000);
+        const diffInSeconds = Math.floor((now.getTime() - this.createdAt.getTime()) / 1000);
 
         // 초 단위
         if (diffInSeconds < 60) {
-            return diffInSeconds <= 5 ? '방금 전 등록' : `${diffInSeconds}초 전 등록`;
+            return diffInSeconds <= 5 ? '방금 전' : `${diffInSeconds}초 전`;
         }
 
         // 분 단위 (1시간 미만)
         const diffInMinutes = Math.floor(diffInSeconds / 60);
         if (diffInMinutes < 60) {
-            return `${diffInMinutes}분 전 등록`;
+            return `${diffInMinutes}분 전`;
         }
 
         // 시간 단위 (1일 미만)
         const diffInHours = Math.floor(diffInMinutes / 60);
         if (diffInHours < 24) {
-            return `${diffInHours}시간 전 등록`;
+            return `${diffInHours}시간 전`;
         }
 
-        // 일 단위 (30일 미만)
+        // 일 단위 (8일 미만)
         const diffInDays = Math.floor(diffInHours / 24);
-        if (diffInDays < 30) {
-            return `${diffInDays}일 전 등록`;
+        if (diffInDays < 8) {
+            return `${diffInDays}일 전`;
         }
 
-        // 월 단위 (12개월 미만)
-        const diffInMonths = Math.floor(diffInDays / 30);
-        if (diffInMonths < 12) {
-            return `${diffInMonths}달 전 등록`;
-        }
-
+        const month = (this.createdAt.getMonth() - 1).toString().padStart(2, '0');
+        const day = (this.createdAt.getDate() - 1).toString().padStart(2, '0');
         // 년 단위
-        const diffInYears = Math.floor(diffInMonths / 12);
-        return `${diffInYears}년 전 등록`;
+        return `${this.createdAt.getFullYear()}.${month}.${day}`;
     }
 }

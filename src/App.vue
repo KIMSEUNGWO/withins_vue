@@ -13,6 +13,13 @@ header, main {
   width: calc(100vw - 200px);
   max-width: 1200px;
 }
+
+@media (max-width: 768px) {
+  header, main {
+    width: initial;
+    margin: 0 5vw;
+  }
+}
 </style>
 
 <script setup lang="ts">
