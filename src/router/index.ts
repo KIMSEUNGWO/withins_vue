@@ -9,8 +9,19 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/login',
-    name: 'login',
-    component: () => import('../views/LoginView.vue')
+    component: () => import('../views/LoginView.vue'),
+    children: [
+      {
+        path: '',
+        name: 'login',
+        component: () => import('../pages/login/LoginPage.vue'),
+      },
+      {
+        path: 'success',
+        name: 'login success',
+        component: () => import('../pages/login/LoginSuccessPage.vue'),
+      },
+    ]
   },
   {
     path: "/news",

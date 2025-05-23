@@ -62,7 +62,7 @@ const paginationRef = ref<InstanceType<typeof PaginationComponent> | null>(null)
 // 초기 검색 파라미터
 const initialSearchParams = {
   word: '',
-  region: 'all'
+  region: 'ALL'
 };
 
 // 검색 함수 정의 (페이지네이션 컴포넌트에 전달)
@@ -71,13 +71,13 @@ const fetchRecruits = async (page: number, params: any): Promise<Pageable<Recrui
   const apiParams = {
     page: page,  // 페이지 인덱스 (0부터 시작)
     condition: {
-      region: params.region || 'all',
+      region: params.region || 'ALL',
       word: params.word || '',
     }
   };
 
   // API 호출
-  return ApiServer.mockRecruit(apiParams);
+  return ApiServer.mockRecruit('');
 };
 
 // 검색 이벤트 핸들러
@@ -86,7 +86,7 @@ const handleSearch = (searchData: any) => {
     // 검색 파라미터 형식 변환
     const params = {
       word: searchData.word || '',
-      region: searchData.condition?.region || 'all'
+      region: searchData.region || 'ALL'
     };
 
     // 페이지네이션 컴포넌트에 검색 조건 업데이트 요청

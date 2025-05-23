@@ -22,11 +22,19 @@
       </li>
     </ul>
     <div id="h-right">
-      <RouterLink to="/login">로그인</RouterLink>
+      <RouterLink to="/login" v-if="isAnonymous">로그인</RouterLink>
+      <span v-else>{{ user.nickname }}</span>
     </div>
   </header>
 </template>
 
+<script setup lang="ts">
+import { useUserStore } from "@/stores/UserStore";
+import { storeToRefs } from "pinia";
+
+const userStore = useUserStore();
+const { isAnonymous, user } = storeToRefs(userStore);
+</script>
 <style scoped>
 header {
   height: 80px;

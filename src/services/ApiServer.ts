@@ -1,11 +1,9 @@
 import {Pageable} from "@/domain/Pageable";
 import {Recruit} from "@/domain/Recruit";
 import {RecruitDetail} from "@/domain/RecruitDetail";
-import {AttachedFile} from "@/domain/AttachedFile";
-import {Organization} from "@/domain/Organization";
 import {Career} from "@/domain/Career";
 import {News} from "@/domain/News";
-
+import axios from "axios";
 export class ApiServer {
 
   static server : String = 'http://localhost:8080/api/v1';
@@ -47,9 +45,11 @@ export class ApiServer {
 
   static mockRecruit(url : String) : Pageable<Recruit> {
     const json = {
-      'totalElements': 71,
-      'totalPages': 8,
-      'pageNumber': 0,
+      'page' : {
+        'totalElements': 71,
+        'totalPages': 8,
+        'pageNumber': 0,
+      },
       'condition' : {
         'word': '테스트',
         'region': 'all',
@@ -262,9 +262,11 @@ export class ApiServer {
 
   static mockCareer(url : string) : Pageable<Career> {
     const json = {
-      'totalElements': 71,
-      'totalPages': 8,
-      'pageNumber': 0,
+      'page' : {
+        'totalElements': 71,
+        'totalPages': 8,
+        'pageNumber': 0,
+      },
       'condition' : {
         'sort': 'POPULAR',
         'tags': [
@@ -384,4 +386,11 @@ export class ApiServer {
     return queryParts.length > 0 ? `?${queryParts.join('&')}` : '';
   }
 
+  static async postFormData(url: string, data: object) {
+    return axios.post(url, data, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+  }
 }

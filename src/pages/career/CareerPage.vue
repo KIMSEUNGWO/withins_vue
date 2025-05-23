@@ -157,7 +157,7 @@ const fetchCareers = async (page: number, params: any): Promise<Pageable<Career>
   };
 
   // API 호출
-  return ApiServer.mockCareer(apiParams);
+  return ApiServer.mockCareer('');
 };
 // 검색 이벤트 핸들러
 const handleSearch = () => {
