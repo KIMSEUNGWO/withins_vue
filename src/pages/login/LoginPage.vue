@@ -59,10 +59,11 @@
 
 <script setup lang="ts">
 
-import { computed, ref } from "vue";
+import {computed, onMounted, ref} from "vue";
 import { useUserStore } from "@/stores/UserStore";
 import LoadingIndicator from "@/components/LoadingIndicator.vue";
 import { useRouter } from "vue-router";
+import Cookies from "js-cookie";
 
 const tabList = {
   'user' : '일반회원',
@@ -77,20 +78,25 @@ const passwordInput = ref<HTMLInputElement>();
 const isLoading = ref(false);
 
 const userStore = useUserStore();
-const { login } = userStore;
+const { login, isAnonymous } = userStore;
 
 const formDisabled = computed(() : boolean => {
   return isLoading.value || username.value.length === 0 || password.value.length === 0;
 });
 
 const router = useRouter();
+if (!isAnonymous) {
+  router.replace('/')
+}
 const submit = async () => {
   isLoading.value = true;
   await login(
     username.value, password.value,
-    (res: any) => {
+    async (res: any) => {
       console.log('로그인 성공');
-      router.push('/');
+      await userStore.loadUserData();
+      // router.push('/login/success');
+      await router.push('/');
     },
     (res: any) => {
       const message = res.response?.data?.message;

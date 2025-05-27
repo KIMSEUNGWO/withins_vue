@@ -62,12 +62,10 @@ export class ApiClient {
             } else {
               // 토큰 갱신 실패
               this.processQueue(new Error('토큰 갱신 실패'))
-              await this._handleTokenExpired();
               return Promise.reject(error);
             }
           } catch (refreshError) {
             this.processQueue(refreshError)
-            await this._handleTokenExpired();
             return Promise.reject(error);
           }
         }
@@ -155,4 +153,14 @@ export const newsApi = {
   }
 }
 
+const hasToken = () : boolean => {
+  const refreshToken = getCookie('refreshToken');
+  return refreshToken != null;
+}
+const getCookie = (name: string) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(';').shift();
+  return null;
+}
 

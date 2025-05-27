@@ -27,7 +27,7 @@ export const useUserStore = defineStore('user', () => {
       .catch(err => failureHandler(err));
   }
 
-  const getUserData = async () => {
+  const loadUserData = async () => {
     await userApi.loadUser()
       .then(res => {
         if (res.status === 200) {
@@ -40,5 +40,5 @@ export const useUserStore = defineStore('user', () => {
 
   const isAnonymous = computed((): boolean => user.value == null);
 
-  return {user, logout, getUserData, login, isAnonymous};
+  return {user, logout, loadUserData, login, isAnonymous};
 });

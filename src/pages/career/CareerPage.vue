@@ -48,13 +48,13 @@
       <div id="condition">
         <input type="hidden" v-model="sort">
         <div id="select-sort-wrap">
-          <button id="select-sort" @click="showSortModal = !showSortModal">
+          <button id="select-sort" @click="showSortModal = !showSortModal" ref="button">
             <span>{{sortMap[sort]}}</span>
             <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" clip-rule="evenodd" d="M4.93161 5.93185C4.75587 6.10759 4.75587 6.39251 4.93161 6.56825C5.10735 6.74398 5.39227 6.74398 5.56801 6.56825L7.49981 4.63644L9.43161 6.56825C9.60735 6.74398 9.89227 6.74398 10.068 6.56825C10.2437 6.39251 10.2437 6.10759 10.068 5.93185L7.81801 3.68185C7.73361 3.59746 7.61915 3.55005 7.49981 3.55005C7.38046 3.55005 7.266 3.59746 7.18161 3.68185L4.93161 5.93185ZM10.068 10.0682C10.2437 9.89251 10.2437 9.60759 10.068 9.43185C9.89227 9.25612 9.60735 9.25612 9.43161 9.43185L7.49981 11.3637L5.56801 9.43185C5.39227 9.25612 5.10735 9.25612 4.93161 9.43185C4.75587 9.60759 4.75587 9.89251 4.93161 10.0682L7.18161 12.3183C7.35735 12.494 7.64227 12.494 7.81801 12.3183L10.068 10.0682Z" fill="#868E96"/>
             </svg>
           </button>
-          <div class="modal" v-if="showSortModal">
+          <div class="modal" v-if="showSortModal" ref="modal">
             <button type="button" class="modal-item" :class="{'current' : sort == key}" v-for="(value, key) in sortMap" :key="key" @click="selectSort(key)">{{value}}</button>
           </div>
         </div>
@@ -75,7 +75,7 @@
 
 <script setup lang="ts">
 
-import {ref, computed, onMounted, watch} from "vue";
+import {ref, computed, onMounted, watch, onUnmounted} from "vue";
 import { Pageable } from "@/domain/Pageable";
 import { ApiServer } from "@/api/ApiServer";
 import { Career } from "@/domain/Career";
@@ -104,7 +104,10 @@ const initialSearchParams = {
 const search = ref('');
 const sort = ref('POPULAR');
 const tags = ref<string[]>([]);
+
 const showSortModal = ref(false);
+const button = ref<HTMLElement | null>(null);
+const modal = ref<HTMLElement | null>(null);
 
 // 검색어를 기반으로 필터링된 태그 목록
 const filteredTagList = computed(() => {
@@ -115,6 +118,19 @@ const filteredTagList = computed(() => {
       tag.toLowerCase().includes(search.value.toLowerCase())
   );
 });
+
+const handleClickOutside = (event: MouseEvent) => {
+  // event.target이 Node인지 확인
+  if (!event.target || !(event.target instanceof Node)) {
+    return;
+  }
+
+  if (showSortModal.value &&
+      button.value && !button.value.contains(event.target) &&
+      (!modal.value || !modal.value.contains(event.target))) {
+    showSortModal.value = false;
+  }
+}
 
 // 선택된 태그가 앞에 오도록 정렬된 태그 목록
 const sortedTagList = computed(() => {
@@ -177,6 +193,8 @@ const route = useRoute();
 
 // 초기화 시 URL의 쿼리 파라미터에서 상태 복원
 onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+
   // URL에서 상태 복원
   if (route.query.sort) {
     sort.value = route.query.sort as string;
@@ -195,6 +213,10 @@ onMounted(() => {
     tags.value = parsedTags;
   }
 });
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside);
+})
 
 
 </script>
