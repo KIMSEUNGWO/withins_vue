@@ -53,7 +53,7 @@
 import { ref } from "vue";
 import RecruitSearchComponent from "@/components/RecruitSearchComponent.vue";
 import PaginationComponent from "@/components/PaginationComponent.vue";
-import { ApiServer } from "@/services/ApiServer";
+import { ApiServer } from "@/api/ApiServer";
 import { Pageable } from "@/domain/Pageable";
 import { Recruit } from "@/domain/Recruit";
 

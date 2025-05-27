@@ -77,7 +77,7 @@
 
 import {ref, computed, onMounted, watch} from "vue";
 import { Pageable } from "@/domain/Pageable";
-import { ApiServer } from "@/services/ApiServer";
+import { ApiServer } from "@/api/ApiServer";
 import { Career } from "@/domain/Career";
 import CareerPaginationComponent from "@/components/CareerPaginationComponent.vue";
 import {useRoute} from "vue-router";

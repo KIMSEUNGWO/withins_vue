@@ -3,7 +3,6 @@ import {Recruit} from "@/domain/Recruit";
 import {RecruitDetail} from "@/domain/RecruitDetail";
 import {Career} from "@/domain/Career";
 import {News} from "@/domain/News";
-import axios from "axios";
 export class ApiServer {
 
   static server : String = 'http://localhost:8080/api/v1';
@@ -173,7 +172,6 @@ export class ApiServer {
     pageable.setContent(recruits)
     return pageable;
   }
-
   static mockNews(url: String, params: object) : Pageable<News> {
     const json = {
       'page' : {
@@ -231,7 +229,6 @@ export class ApiServer {
     pageable.setContent(news)
     return pageable;
   }
-  
   static mockRecruitDetail(url : String) : RecruitDetail {
     const json = {
       'recruitId': 1,
@@ -259,7 +256,6 @@ export class ApiServer {
 
     return new RecruitDetail(json);
   }
-
   static mockCareer(url : string) : Pageable<Career> {
     const json = {
       'page' : {
@@ -373,7 +369,6 @@ export class ApiServer {
     return pageable;
   }
 
-
   static toQueryParams(params : object) {
     if (params == null) return '';
     const queryParts = Object.entries(params)
@@ -386,11 +381,4 @@ export class ApiServer {
     return queryParts.length > 0 ? `?${queryParts.join('&')}` : '';
   }
 
-  static async postFormData(url: string, data: object) {
-    return axios.post(url, data, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    });
-  }
 }

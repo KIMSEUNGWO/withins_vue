@@ -31,9 +31,14 @@
 <script setup lang="ts">
 import { useUserStore } from "@/stores/UserStore";
 import { storeToRefs } from "pinia";
+import { onMounted } from "vue";
 
 const userStore = useUserStore();
 const { isAnonymous, user } = storeToRefs(userStore);
+
+onMounted(async () => {
+  await userStore.getUserData();
+})
 </script>
 <style scoped>
 header {

@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router';
-import {ApiServer} from "@/services/ApiServer";
+import {ApiServer} from "@/api/ApiServer";
 
 const router = useRouter();
 const route = useRoute();

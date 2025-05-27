@@ -2,9 +2,12 @@
 <template>
   <div id="login-wrap">
     <div id="login">
-
+      <LoadingIndicator
+        :show="isLoading"
+        type="dots"
+      />
       <div id="tabs">
-        <button type="button" class="tab" :class="{'active' : tab == key}"
+        <button type="button" class="tab" :class="{'active' : tab === key}"
                 @click="tab = key"
                 v-for="(value, key) in tabList" :key="key"
         >{{value}}
@@ -26,9 +29,10 @@
           <div class="field_inner">
             <label for="username">
               <input class="field"
+                     ref="usernameInput"
                      v-model="username"
+                     autofocus
                      tabindex="0"
-                     aria-label="아이디"
                      placeholder="아이디"
                      autocomplete="off"
                      id="username" name="username" type="text">
@@ -37,27 +41,27 @@
           <div class="field_inner">
             <label for="password">
               <input class="field"
+                     ref="passwordInput"
                      v-model="password"
-                     tabindex="0"
-                     aria-label="비밀번호"
+                     tabindex="1"
                      placeholder="비밀번호"
                      autocomplete="off"
                      id="password" name="password" type="password">
             </label>
           </div>
         </div>
-        <button type="submit" id="submit">로그인</button>
+        <button type="submit" id="submit" :disabled="formDisabled">로그인</button>
       </form>
+
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 
-import {ref} from "vue";
-import axios from "axios";
+import { computed, ref } from "vue";
 import { useUserStore } from "@/stores/UserStore";
-import { storeToRefs } from "pinia";
+import LoadingIndicator from "@/components/LoadingIndicator.vue";
 import { useRouter } from "vue-router";
 
 const tabList = {
@@ -68,23 +72,37 @@ const tab = ref('user')
 
 const username = ref('');
 const password = ref('');
+const usernameInput = ref<HTMLInputElement>();
+const passwordInput = ref<HTMLInputElement>();
+const isLoading = ref(false);
 
 const userStore = useUserStore();
-const router = useRouter();
 const { login } = userStore;
 
+const formDisabled = computed(() : boolean => {
+  return isLoading.value || username.value.length === 0 || password.value.length === 0;
+});
+
+const router = useRouter();
 const submit = async () => {
-  await login(router,
+  isLoading.value = true;
+  await login(
     username.value, password.value,
     (res: any) => {
       console.log('로그인 성공');
-      console.log(res);
+      router.push('/');
     },
     (res: any) => {
-      console.log('로그인 실패')
+      const message = res.response?.data?.message;
+      if (message) {
+        alert(message)
+      }
+      passwordInput.value?.focus();
     }
   );
+  isLoading.value = false;
 }
+
 </script>
 
 <style scoped>
@@ -132,7 +150,7 @@ form {
   border-radius: 16px;
   border: 1px #eee solid;
   box-shadow: 10px 10px 30px rgba(0,0,0,0.06);
-
+  position: relative;
   padding: 15px;
 }
 
@@ -204,5 +222,10 @@ form {
 }
 #kakao-btn:hover {
   background-color: #fbe006;
+}
+
+button:disabled {
+  background-color: #999999 !important;
+  cursor: not-allowed;
 }
 </style>

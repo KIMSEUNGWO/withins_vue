@@ -10,11 +10,9 @@ import { useUserStore } from "@/stores/UserStore";
 import { useRouter } from "vue-router";
 
 const userStore = useUserStore();
-const { getData } = userStore;
 const router = useRouter();
 
 const load = async () => {
-  await getData();
   await router.replace("/");
 }
 load();
