@@ -23,7 +23,13 @@
     </ul>
     <div id="h-right">
       <RouterLink to="/login" v-if="isAnonymous">로그인</RouterLink>
-      <span v-else>{{ user.nickname }}</span>
+      <div id="user-info-wrap" v-else>
+        <button type="button" id="user-icon" @click="showModal = !showModal">{{ user.nickname }}</button>
+        <div class="modal" v-if="showModal">
+          <RouterLink to="/user/info" class="modal-item">개인정보수정</RouterLink>
+          <button type="button" @click="logout" class="modal-item logout">로그아웃</button>
+        </div>
+      </div>
     </div>
   </header>
 </template>
@@ -31,14 +37,29 @@
 <script setup lang="ts">
 import { useUserStore } from "@/stores/UserStore";
 import { storeToRefs } from "pinia";
-import { onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
 const userStore = useUserStore();
 const { isAnonymous, user } = storeToRefs(userStore);
 
+const router = useRouter();
+
+const showModal = ref(true);
 onMounted(async () => {
   await userStore.getUserData();
 })
+
+const logout = async () => {
+  await userStore.logout(
+    (res: any) => {
+      router.push("/login?logout");
+    },
+    (error: any) => {
+      console.log('로그아웃 실패', error);
+    }
+  );
+}
 </script>
 <style scoped>
 header {
@@ -87,5 +108,51 @@ header {
   top: 150%;
   left: 0;
   z-index: 2;
+}
+
+
+#user-icon {
+  padding: 10px 15px;
+  border-radius: 8px;
+}
+#user-icon:hover {
+  background-color: #F5F5F5;
+}
+
+/* modal */
+#user-info-wrap {
+  position: relative;
+}
+.modal {
+  position: absolute;
+  z-index: 5;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px #E9ECEF solid;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  top: 120%;
+  background-color: white;
+  box-shadow: 4px 4px 8px rgba(0,0,0,0.06);
+}
+.modal-item {
+  height: 40px;
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  justify-content: start;
+  color: var(--f2);
+  font-size: 14px;
+}
+.modal-item.logout {
+  color: #FF4B4B;
+}
+.modal-item:hover {
+  background-color: #f5f5f5;
+}
+.modal-item.logout:hover {
+  background-color: rgba(255, 75, 75, 0.1);
 }
 </style>

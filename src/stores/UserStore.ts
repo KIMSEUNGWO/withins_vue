@@ -17,6 +17,16 @@ export const useUserStore = defineStore('user', () => {
       .catch(err => failureHandler(err));
   }
 
+  const logout = async (successHandler: Function, failureHandler: Function) => {
+
+    return await authApi.logout()
+      .then(res => {
+        user.value = null;
+        successHandler(res)
+      })
+      .catch(err => failureHandler(err));
+  }
+
   const getUserData = async () => {
     await userApi.loadUser()
       .then(res => {
@@ -25,9 +35,10 @@ export const useUserStore = defineStore('user', () => {
           user.value = new Member(data);
         }
       })
+      .catch(err => user.value = null);
   }
 
   const isAnonymous = computed((): boolean => user.value == null);
 
-  return {user, getUserData, login, isAnonymous};
+  return {user, logout, getUserData, login, isAnonymous};
 });

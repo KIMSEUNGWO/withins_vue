@@ -125,19 +125,17 @@ export { apiClient };
 export default axios;
 
 export const authApi = {
-  authTest: async () => {
-    await axios.get('/auth/test');
-  },
 
   formLogin: async (username: string, password: string) => {
-
-    const response = await axios.post('/api/login', {
+    return await axios.post('/api/login', {
       username: username,
       password: password
     });
-
-    return response;
   },
+
+  logout: async () => {
+    return await axios.post('/api/logout');
+  }
 }
 
 export const userApi = {

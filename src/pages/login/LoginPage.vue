@@ -43,7 +43,7 @@
               <input class="field"
                      ref="passwordInput"
                      v-model="password"
-                     tabindex="1"
+                     tabindex="0"
                      placeholder="비밀번호"
                      autocomplete="off"
                      id="password" name="password" type="password">
