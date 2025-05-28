@@ -31,7 +31,6 @@
               <input class="field"
                      ref="usernameInput"
                      v-model="username"
-                     autofocus
                      tabindex="0"
                      placeholder="아이디"
                      autocomplete="off"
@@ -63,7 +62,6 @@ import {computed, onMounted, ref} from "vue";
 import { useUserStore } from "@/stores/UserStore";
 import LoadingIndicator from "@/components/LoadingIndicator.vue";
 import { useRouter } from "vue-router";
-import Cookies from "js-cookie";
 
 const tabList = {
   'user' : '일반회원',
